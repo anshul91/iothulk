@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://10.68.79.79:8081/anshul/har';//'https://www.gadgetprogrammers.online/har';
+$config['base_url'] = 'http://10.68.79.79:8081/anshul/har/iothulk';//'https://www.gadgetprogrammers.online/har';
 define('IMAGE_PATH', "./assets/image/");
 define('CSS_URL', $config['base_url'] . "/assets/css/");
 define('JS_URL', $config['base_url'] . "/assets/js/");
