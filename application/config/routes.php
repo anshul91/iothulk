@@ -53,5 +53,6 @@ $route['default_controller'] = 'Admin_user/index';
 $route['logout'] = 'Admin_user/logout';
 $route['login'] = 'Admin_user/login';
 $route['signup'] = 'Admin_user/signup';
+$route['device-list'] = 'Admin_device/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

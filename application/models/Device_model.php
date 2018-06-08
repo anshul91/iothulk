@@ -19,7 +19,7 @@ class Device_model extends CI_Model {
      */
     public $tbl_users = "tbl_users";
     public $tbl_api_key = "tbl_api_key";
-    public $tbl_api_key = "tbl_device";
+    public $tbl_device = "tbl_device";
     public function signup($data) {
         $data_to_store = $this->security->xss_clean($data);
         $ret = $this->db->insert($this->tbl_users, $data_to_store);
@@ -37,13 +37,15 @@ class Device_model extends CI_Model {
 
 
     public function deviceListDt($filter = array()) {
-        $columns = array(`device_id`, `title`, `sub_title`, `signal_type`, `device_type`, `description`, `short_desc`, `min_val`, `max_val`, `sensor_name`, `created`, `modified`, `created_by`, `purpose`, `max_request`);
+        $columns = array(`device_id`, `title`, `sub_title`, `signal_type`, `device_type`, 
+            `description`, `short_desc`, `min_val`, `max_val`, `sensor_name`, `created`, 
+            `modified`, `created_by`, `purpose`, `max_request`);
 //        $remCols = array('userid', 'allowed_dist', "allowed_project", "role_id"); //columns to be removed from datatable
         $requestData = rq();
         $cols = implode(",", $columns);
         $cond = ' Where 1=1 ';
 //        prd($filter);
-        $fields = $this->db->list_fields($this->tbl_users);
+        $fields = $this->db->list_fields($this->tbl_device);
         if (sizeof($filter) > 0 && is_array($filter)) {
             foreach ($fields as $field) {
                 if (isset($filter[$field]) && array_key_exists($field, $filter)) {
@@ -52,14 +54,14 @@ class Device_model extends CI_Model {
             }
         }
         $sql = "SELECT $cols ";
-        $sql.=" from $this->tbl_users " .
+        $sql.=" from $this->tbl_device as t1 left join $this->tbl_users as t2 on t1.created_by=t2.user_id " .
                 " $cond ";
         $query = $this->db->query($sql);
         $totalData = $query->num_rows();
         $totalFiltered = $totalData;
         if (!empty($requestData['search']['value'])) {
-            $sql.=" AND ( username ILIKE '" . $requestData['search']['value'] . "%' ";
-            $sql.=" OR cast(usercontactno as text) ILIKE '" . $requestData['search']['value'] . "%' )";
+            $sql.=" AND ( title ILIKE '" . $requestData['search']['value'] . "%' ";
+            $sql.=" OR sub_title ILIKE '" . $requestData['search']['value'] . "%' )";
         }
         $sql.=" ORDER BY " . $columns[$requestData['order'][0]['column']] . "   " . $requestData['order'][0]['dir'] . "  LIMIT " . $requestData['length'] . " OFFSET " . $requestData['start'] . "   ";
         $resArr = $this->db->query($sql);
@@ -70,20 +72,25 @@ class Device_model extends CI_Model {
             $nestedData = array();
             $nestedData[] = $cnt++;
 
-            foreach ($row as $k => $v) {
-                if (in_array(trim($k), $columns) && !in_array($k, $remCols)) {
-                    if (isset($v) && !empty($v)) {
-                        $nestedData[] = $v;
-                    } else {
-                        $nestedData[] = "<span style='color:red;'>Not Available.</span>";
-                    }
-                }
-            }
-            $nestedData[] = isset($row['allowed_dist']) && !empty($row['allowed_dist']) && is_numeric($row['allowed_dist']) ? getDistrict(array("distid" => $row['allowed_dist']))[0]->distnamee : "<span style='color:green;'>" . strtoupper($row['allowed_dist']) . "</span>";
-            $nestedData[] = isset($row['allowed_project']) && !empty($row['allowed_project']) && is_numeric($row['allowed_project']) ? getProject(array("projectcode" => $row['allowed_project']))[0]->projectname : "<span style='color:green'>" . strtoupper($row['allowed_project']) . "</span>";
-            $nestedData[] = isset($row['role_id']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+//            foreach ($row as $k => $v) {
+//                if (in_array(trim($k), $columns) && !in_array($k, $remCols)) {
+//                    if (isset($v) && !empty($v)) {
+//                        $nestedData[] = $v;
+//                    } else {
+//                        $nestedData[] = "<span style='color:red;'>Not Available.</span>";
+//                    }
+//                }
+//            }
+            $nestedData[] = isset($row['title']) && !empty($row['title']) && is_numeric($row['title'])?$row['title'] :"N/A";
+            $nestedData[] = isset($row['sub_title']) && !empty($row['allowed_project']) && is_numeric($row['allowed_project']) ? getProject(array("projectcode" => $row['allowed_project']))[0]->projectname : "<span style='color:green'>" . strtoupper($row['allowed_project']) . "</span>";
+            $nestedData[] = isset($row['signal_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+            $nestedData[] = isset($row['device_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+            $nestedData[] = isset($row['description']) ?$row['description']:"" ;
+            $nestedData[] = isset($row['short_desc']) ?$row['short_desc']:"" ;
+            $nestedData[] = isset($row['min_val']) ? $row['min_val']:"" ;
+            $nestedData[] = isset($row['max_val']) ?$row['max_val']:"" ;
 //            prd($row['group_id']);
-            $encUserId = encryptMyData($row['userid']);
+            $sensorName = ($row['sensor_name']);
             $delFxn = "deleteUser('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
                     "','" . $this->security->get_csrf_hash() . "')";
             $nestedData[] = " <button class='btn btn-success btn-xs' id='showUpdatePopup' name='showUpdatePopup'"
