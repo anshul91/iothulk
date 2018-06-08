@@ -10,19 +10,20 @@ $api_key = $sess_data['userdata']['api_key'];
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li class="nav-devider"></li>
-                <li class="nav-label">Home</li>
-                <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-tachometer"></i><span class="hide-menu">Dashboard <span class="label label-rouded label-primary pull-right">2</span></span></a>
+                <li class="nav-label">Learning</li>
+                <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-tachometer"></i><span class="hide-menu">How it Works? </span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="index.html">Ecommerce </a></li>
-                        <li><a href="index1.html">Analytics </a></li>
+                        <li><a href="overview.php">Overview </a></li>
+                        <li><a href="#">How to use? </a></li>
+                        <li><a href="#">Sandbox </a></li>
                     </ul>
                 </li>
-                <li class="nav-label">Apps</li>
+                <li class="nav-label">My devices</li>
                 <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Email</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="email-compose.html">Compose</a></li>
-                        <li><a href="email-read.html">Read</a></li>
-                        <li><a href="email-inbox.html">Inbox</a></li>
+                        <li><a href="device-list">Devices</a></li>
+<!--                        <li><a href="email-read.html">Read</a></li>
+                        <li><a href="email-inbox.html">Inbox</a></li>-->
                     </ul>
                 </li>
                 <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-bar-chart"></i><span class="hide-menu">Charts</span></a>
