@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 var path_arr = window.location.pathname.split("/");
-var BASE_URL = window.location.origin + "/" + path_arr[1] + "/" + path_arr[2] + "/";
+var BASE_URL = window.location.origin + "/" + path_arr[1] + "/" + path_arr[2] + "/" + path_arr[3] + "/";
 var jq = $.noConflict();
 function fancyAlert(msg, msgType) {
     var msgColor = "red";
@@ -23,22 +23,22 @@ function fancyAlert(msg, msgType) {
         msgType = "Info";
         msgColor = "info";
         icons = 'fa fa-info-circle';
-    }else if(msgType.toLowerCase()=='warning'){
+    } else if (msgType.toLowerCase() == 'warning') {
         msgType = "Warning";
         msgColor = "orange";
         icons = 'fa fa-exclamation-triangle';
     }
     else {
         msgType = "error";
-        msgColor="red",
-        icons = 'fa fa-exclamation-triangle';
+        msgColor = "red",
+                icons = 'fa fa-exclamation-triangle';
     }
     jq.alert({
-        theme:"modern",
+        theme: "modern",
         title: msgType,
         content: msg,
         draggable: true,
-         icon: icons,
+        icon: icons,
         type: msgColor,
         typeAnimated: true
     });
