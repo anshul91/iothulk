@@ -24,9 +24,9 @@
     });
 });
 
-function get_device_list(csrfname, csrfhash) {
+function get_device_list() {
     var sendData = {};
-    sendData[csrfname] = csrfhash;
+    //sendData[csrfname] = csrfhash;
     $("#deviceTable").dataTable().fnDestroy();
     var dataTable = $('#deviceTable').DataTable({
 //        "processing": true,

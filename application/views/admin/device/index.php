@@ -153,7 +153,6 @@
 </div>
 <script>
     jQuery("document").ready(function () {
-        get_device_list('<?php echo $this->security->get_csrf_token_name(); ?>',
-                '<?php echo $this->security->get_csrf_hash(); ?>')
+        get_device_list()
     });
 </script>
