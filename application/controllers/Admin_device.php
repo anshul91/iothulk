@@ -21,6 +21,8 @@ class Admin_device extends CI_Controller {
     }
     
     public function get_device_list(){
-        
+        $data = $this->Device_model->get_device_list();
+        echo json_encode($data);
+        exit;
     }
 }
