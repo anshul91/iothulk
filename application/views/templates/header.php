@@ -12,10 +12,10 @@ $sess_userdata = $sess_userdata['userdata'][0];
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>GadgetProgrammers</title>
+        <title>GadgetProgrammers | IOT HULK |IOT </title>
         <link href="<?php echo CSS_URL; ?>lib/bootstrap/bootstrap.min.css" rel="stylesheet">
         <!-- Custom CSS -->
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link href="<?php echo CSS_URL; ?>lib/calendar2/semantic.ui.min.css" rel="stylesheet">
         <link href="<?php echo CSS_URL; ?>lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
         <link href="<?php echo CSS_URL; ?>lib/owl.carousel.min.css" rel="stylesheet" />
@@ -25,7 +25,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
         <script src="<?php echo JS_URL; ?>admin/common.js" type="text/javascript"></script>
         <script src="<?php echo JS_URL; ?>admin/admin_user.js" type="text/javascript"></script>
 
-       
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
 
@@ -113,7 +113,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
         
                 </script>-->
         <!--skycons-icons-->
-        <!--<script src="<?php // echo JS_URL;  ?>skycons.js"></script>-->
+        <!--<script src="<?php // echo JS_URL;   ?>skycons.js"></script>-->
         <!--//skycons-icons-->
     </head>
 
@@ -132,10 +132,12 @@ $sess_userdata = $sess_userdata['userdata'][0];
                     <div class="navbar-header">
                         <a class="navbar-brand" href="index.html">
                             <!-- Logo icon -->
-                            <b><img src="<?PHP echo IMAGE_URL; ?>logo.png" alt="homepage" class="dark-logo" /></b>
+                            <b>
+                                <img src="https://gadgetprogrammers.online/assets/front_end/images/GadgetProgrammers.png" alt="homepage" width="30px"class="dark-logo" />
+                            </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
-                            <span><img src="<?PHP echo IMAGE_URL; ?>logo-text.png" alt="homepage" class="dark-logo" /></span>
+                            <span><a href="www.gadgetprogrammers.online">GadgetProgrammers</a></span>
                         </a>
                     </div>
                     <!-- End Logo -->

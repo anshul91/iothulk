@@ -20,26 +20,25 @@ class Device_model extends CI_Model {
     public $tbl_users = "tbl_users";
     public $tbl_api_key = "tbl_api_key";
     public $tbl_device = "tbl_device";
+
     public function signup($data) {
         $data_to_store = $this->security->xss_clean($data);
         $ret = $this->db->insert($this->tbl_users, $data_to_store);
-        if ($ret){
-             $insert_id = $this->db->insert_id();
-             $api_data = array("user_id"=>$insert_id,"api_key"=>time().rand(),"updated"=>date("Ymd"));
-             if($this->db->insert($this->tbl_api_key,$api_data))
+        if ($ret) {
+            $insert_id = $this->db->insert_id();
+            $api_data = array("user_id" => $insert_id, "api_key" => time() . rand(), "updated" => date("Ymd"));
+            if ($this->db->insert($this->tbl_api_key, $api_data))
                 return true;
             else
                 return false;
-        }
-        else
+        } else
             return false;
     }
 
-
-    public function deviceListDt($filter = array()) {
-        $columns = array(`device_id`, `title`, `sub_title`, `signal_type`, `device_type`, 
-            `description`, `short_desc`, `min_val`, `max_val`, `sensor_name`, `created`, 
-            `modified`, `created_by`, `purpose`, `max_request`);
+    public function get_device_list($filter = array()) {
+        $columns = array('device_id', 'title', 'sub_title', 'signal_type', 'device_type',
+            'description', 'short_desc', 'min_val', 'max_val', 'sensor_name', 't1.created',
+            't1.modified', 'created_by', 'purpose', 'max_request');
 //        $remCols = array('userid', 'allowed_dist', "allowed_project", "role_id"); //columns to be removed from datatable
         $requestData = rq();
         $cols = implode(",", $columns);
@@ -60,49 +59,46 @@ class Device_model extends CI_Model {
         $totalData = $query->num_rows();
         $totalFiltered = $totalData;
         if (!empty($requestData['search']['value'])) {
-            $sql.=" AND ( title ILIKE '" . $requestData['search']['value'] . "%' ";
-            $sql.=" OR sub_title ILIKE '" . $requestData['search']['value'] . "%' )";
+            $sql.=" AND ( title LIKE '" . $requestData['search']['value'] . "%' ";
+            $sql.=" OR sub_title LIKE '" . $requestData['search']['value'] . "%' )";
         }
         $sql.=" ORDER BY " . $columns[$requestData['order'][0]['column']] . "   " . $requestData['order'][0]['dir'] . "  LIMIT " . $requestData['length'] . " OFFSET " . $requestData['start'] . "   ";
         $resArr = $this->db->query($sql);
-
+//        echo lastQuery();die;
         $cnt = $requestData['start'] ? $requestData['start'] + 1 : 1;
         $data = array();
-        foreach ($resArr->result_array()as $rk => $row) {  // preparing an array
-            $nestedData = array();
-            $nestedData[] = $cnt++;
+        $resData = $resArr->result_array();
+        if (count($resData) > 0) {
+            foreach ($resData as $rk => $row) {  // preparing an array
+                $nestedData = array();
+                $nestedData[] = $cnt++;
 
-//            foreach ($row as $k => $v) {
-//                if (in_array(trim($k), $columns) && !in_array($k, $remCols)) {
-//                    if (isset($v) && !empty($v)) {
-//                        $nestedData[] = $v;
-//                    } else {
-//                        $nestedData[] = "<span style='color:red;'>Not Available.</span>";
-//                    }
-//                }
-//            }
-            $nestedData[] = isset($row['title']) && !empty($row['title']) && is_numeric($row['title'])?$row['title'] :"N/A";
-            $nestedData[] = isset($row['sub_title']) && !empty($row['allowed_project']) && is_numeric($row['allowed_project']) ? getProject(array("projectcode" => $row['allowed_project']))[0]->projectname : "<span style='color:green'>" . strtoupper($row['allowed_project']) . "</span>";
-            $nestedData[] = isset($row['signal_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
-            $nestedData[] = isset($row['device_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
-            $nestedData[] = isset($row['description']) ?$row['description']:"" ;
-            $nestedData[] = isset($row['short_desc']) ?$row['short_desc']:"" ;
-            $nestedData[] = isset($row['min_val']) ? $row['min_val']:"" ;
-            $nestedData[] = isset($row['max_val']) ?$row['max_val']:"" ;
+                $nestedData[] = isset($row['title']) && !empty($row['title']) && is_numeric($row['title']) ? $row['title'] : "N/A";
+                $nestedData[] = isset($row['sub_title']) && !empty($row['allowed_project']) && is_numeric($row['allowed_project']) ? getProject(array("projectcode" => $row['allowed_project']))[0]->projectname : "<span style='color:green'>" . strtoupper($row['allowed_project']) . "</span>";
+                $nestedData[] = isset($row['signal_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+                $nestedData[] = isset($row['device_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+                $nestedData[] = isset($row['sensor_name']) ? $row['sensor_name'] : "";
+
+                $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
+                $nestedData[] = isset($row['max_val']) ? $row['max_val'] : "";
+                $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
+                $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
+                $nestedData[] = isset($row['created']) ? $row['created'] : "";
 //            prd($row['group_id']);
-            $sensorName = ($row['sensor_name']);
-            $delFxn = "deleteUser('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
-                    "','" . $this->security->get_csrf_hash() . "')";
-            $nestedData[] = " <button class='btn btn-success btn-xs' id='showUpdatePopup' name='showUpdatePopup'"
-                    . " onclick=showUpdatePopup('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
-                    "','" . $this->security->get_csrf_hash() . "')>" . User_lang::BUTTON_UPDATE . "</button> "
-                    . "<button class='btn btn-danger btn-xs' onclick=$delFxn>" . User_lang::BUTTON_DELETE . "</button> ";
+                $sensorName = ($row['sensor_name']);
+                $delFxn = "deleteUser('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
+                        "','" . $this->security->get_csrf_hash() . "')";
+                $nestedData[] = " <button class='btn btn-success btn-xs' id='showUpdatePopup' name='showUpdatePopup'"
+                        . " onclick=showUpdatePopup('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
+                        "','" . $this->security->get_csrf_hash() . "')>" . User_lang::BUTTON_UPDATE . "</button> "
+                        . "<button class='btn btn-danger btn-xs' onclick=$delFxn>" . User_lang::BUTTON_DELETE . "</button> ";
 
-            $data[] = $nestedData;
+                $data[] = $nestedData;
+            }
         }
-
+        
         $data = array(
-            "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+            "draw" => intval($requestData['draw']) > 0 ? $requestData['draw'] : 0, // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
             "recordsTotal" => intval($totalData), // total number of records
             "recordsFiltered" => intval($totalFiltered), // total number of records after searching, if there is no searching then totalFiltered = totalData
             "data" => $data   // total data array
