@@ -5,7 +5,7 @@
  * CREATED DATE:
  * MODIFIED DATE:  
  */
-if (!function_exists("addCalendar")) {
+if (!function_exists("addCalendarJs")) {
 
     function addCalendarJs() {
         echo '<link href="' . CSS_URL . 'admin/jquery-ui.css" rel="stylesheet" type="text/css"/>
