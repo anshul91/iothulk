@@ -25,4 +25,37 @@ class Admin_device extends CI_Controller {
         echo json_encode($data);
         exit;
     }
+    public function add_device_detail(){
+        if ($this->input->post()) {
+            $this->form_validation->set_rules("title", "Title", "trim|required");
+            $this->form_validation->set_rules('sub_title', 'Sub Title', 'trim|required');
+            $this->form_validation->set_rules("signal_type", "Signal Type", "trim|required");
+            $this->form_validation->set_rules('device_type', 'Device Type', 'trim|required');
+            $this->form_validation->set_rules("purpose", "Purpose", "trim|required");
+            $this->form_validation->set_rules('description', 'Description', 'trim|required');
+             $this->form_validation->set_rules("short_desc", "Short Description", "trim|required");
+            if ($this->form_validation->run()) {
+                $data_to_store = array(
+                    "title" => rq("title"),
+                    "sub_title" => rq("sub_title"),
+                    "signal_type" => rq("signal_type"),
+                    "sub_title" => rq("sub_title"),
+                    "device_type" => rq("device_type"),
+                    "purpose" => rq("purpose"),
+                    "description" => rq("description"),
+                    "short_desc" => rq("sub_description"),
+                );
+                if(!$this->Device_model->add_device_detail($data_to_store)){
+                    echo json_encode(array("status" => 0, "msg_type" => "error", "msg" => "Something unexpected happened!"));
+                exit;
+                }else{
+                    echo json_encode(array("status" => 1, "msg_type" => "success", "msg" => "Device Detail Added Successfully!"));
+                exit;
+                }
+            }else {
+                echo json_encode(array("status" => 0, "msg_type" => "error", "msg" => validation_errors()));
+                exit;
+            }
+        }
+    }
 }

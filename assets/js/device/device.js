@@ -1,3 +1,28 @@
+ jQuery("document").ready(function () {
+ $("#saveDevice").on('click',function(){
+            var url = BASE_URL + "/Admin_device/add_device_detail"
+           $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $("#frm_device").serialize(), // serializes the form's elements.
+            success: function (data)
+            {
+                fancyAlert(data.msg, data.msg_type);
+                if (data.status === 1)
+                    setTimeout(function () {
+                        // show response from the php script.
+                        window.location.href = BASE_URL."device-list";
+                    }, 2000);
+            },
+            error: function (data) {
+                alert("err"+data);
+            }
+        });
+
+        e.preventDefault();
+    });
+});
 
 function get_device_list(csrfname, csrfhash) {
     var sendData = {};

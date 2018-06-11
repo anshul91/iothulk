@@ -107,16 +107,16 @@ class Device_model extends CI_Model {
         return $data;
     }
 
-    public function addUser(array $data) {
+    public function add_device_detail(array $data) {
         $data_to_store = $this->security->xss_clean($data);
-        $ret = $this->db->insert($this->tbl_users, $data_to_store);
+        $ret = $this->db->insert($this->tbl_device, $data_to_store);
 //        echo $this->db->last_query();
 //        die;
         if ($ret) {
-            actionTrail("User Add action performed", User_lang::ACTION_TRAIL_SUCCESS);
+            //actionTrail("User Add action performed", User_lang::ACTION_TRAIL_SUCCESS);
             return true;
         } else {
-            actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
+            //actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
             return false;
         }
     }
