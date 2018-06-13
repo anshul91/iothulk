@@ -26,14 +26,18 @@ class Admin_device extends CI_Controller {
         exit;
     }
     public function add_device_detail(){
+
         if ($this->input->post()) {
             $this->form_validation->set_rules("title", "Title", "trim|required");
             $this->form_validation->set_rules('sub_title', 'Sub Title', 'trim|required');
+
             $this->form_validation->set_rules("signal_type", "Signal Type", "trim|required");
             $this->form_validation->set_rules('device_type', 'Device Type', 'trim|required');
+            $this->form_validation->set_rules("sensor_name", "Sensor Name", "trim|required");
             $this->form_validation->set_rules("purpose", "Purpose", "trim|required");
             $this->form_validation->set_rules('description', 'Description', 'trim|required');
              $this->form_validation->set_rules("short_desc", "Short Description", "trim|required");
+             //print_r($this->session->userdata('admin_userdata')['userdata'][0]->user_id);die;
             if ($this->form_validation->run()) {
                 $data_to_store = array(
                     "title" => rq("title"),
@@ -44,6 +48,7 @@ class Admin_device extends CI_Controller {
                     "purpose" => rq("purpose"),
                     "description" => rq("description"),
                     "short_desc" => rq("sub_description"),
+                    "created_by"=>$this->session->userdata('admin_userdata')['userdata'][0]->user_id
                 );
                 if(!$this->Device_model->add_device_detail($data_to_store)){
                     echo json_encode(array("status" => 0, "msg_type" => "error", "msg" => "Something unexpected happened!"));

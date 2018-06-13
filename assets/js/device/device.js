@@ -12,7 +12,7 @@
                 if (data.status === 1)
                     setTimeout(function () {
                         // show response from the php script.
-                        window.location.href = BASE_URL."device-list";
+                        window.location.href = BASE_URL+"device-list";
                     }, 2000);
             },
             error: function (data) {

@@ -13,6 +13,7 @@
                         <table id="deviceTable" class="table table-bordered table-striped" width='100%'>
                             <thead>
                                 <tr>
+                                    <th>S.no.</th>
                                     <th>Title</th>
                                     <th>Sub Title</th>
                                     <th>Signal Type</th>
@@ -41,14 +42,14 @@
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Device</h4>
+                            <!-- <h4 class="modal-title">Add Device</h4> -->
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
                             <div class="card-body">
-                                <form action="#">
+                                <form action="#" id="frm_device">
                                     <div class="form-body">
                                         <h3 class="card-title m-t-15">Device Info</h3>
                                         <hr>
@@ -56,7 +57,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Device Title</label>
-                                                    <input type="text" id="firstName" class="form-control" placeholder="Temprature Sensor...">
+                                                    <input type="text" id="title" name="title" class="form-control" placeholder="Temprature Sensor...">
                                                     <!--<small class="form-control-feedback"> This is inline help </small>--> 
                                                 </div>
                                             </div>
@@ -64,7 +65,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group has-danger">
                                                     <label class="control-label">Device Sub-title</label>
-                                                    <input type="text" id="lastName" class="form-control form-control-danger" placeholder="Combined with arduino">
+                                                    <input type="text" class="form-control form-control-danger" placeholder="Combined with arduino" id="sub_title" name="sub_title">
                                                     <!--<small class="form-control-feedback"> This field has error. </small>-->
                                                 </div>
                                             </div>
@@ -75,9 +76,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Signal Type</label>
-                                                    <select class="form-control custom-select">
-                                                        <option value="">Digital</option>
-                                                        <option value="">Analog</option>
+                                                    <select class="form-control custom-select" name="signal_type" id="signal_type">
+                                                        <option value="1">Digital</option>
+                                                        <option value="2">Analog</option>
                                                     </select>
                                                     <!--<small class="form-control-feedback"> Select your gender </small>--> 
                                                 </div>
@@ -86,7 +87,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Device Type</label>
-                                                        <select class="form-control custom-select">
+                                                        <select class="form-control custom-select" name="device_type" id="device_type">
                                                             <option value="1">Single Value (sensor)</option>
                                                             <option value="2">GPS (LAT. LONG.)</option>
                                                         </select>
@@ -99,14 +100,14 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Sensor Name</label>
-                                                        <input type="text" class="form-control" placeholder="Sensor Name"name="device_type" id="device_type">
+                                                        <input type="text" class="form-control" placeholder="Sensor Name"name="sensor_name" id="sensor_name">
                                                 </div>
                                             </div>
                                             <!--/span-->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Purpose</label>
-                                                    <textarea class="form-control" name="purpose" id="purpose"></textarea>
+                                                    <textarea class="form-control" name="purpose" id="purpose" placeholder="Purpose of adding device"></textarea>
                                                 </div>
                                             </div>
                                             <!--/span-->
@@ -116,30 +117,28 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Description Name</label>
-                                                        <input type="text" class="form-control" placeholder="Sensor Name"name="device_type" id="device_type">
+                                                    <label class="control-label">Description </label>
+                                                        <input type="text" class="form-control" placeholder="description"name="description" id="description">
                                                 </div>
                                             </div>
                                             <!--/span-->
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Purpose</label>
-                                                    <textarea class="form-control" name="purpose" id="purpose"></textarea>
+                                                    <label class="control-label">Short Description</label>
+                                                    <textarea class="form-control" name="short_desc" id="short_desc" placeholder="Short Description"></textarea>
                                                 </div>
                                             </div>
                                             <!--/span-->
                                         </div>
                                     </div>
-                                    <div class="form-actions">
-                                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
-                                        <button type="button" class="btn btn-inverse">Cancel</button>
-                                    </div>
+                                   
                                 </form>
                             </div>
                         </div>
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="saveDevice"> <i class="fa fa-check"></i> Save</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
 
@@ -153,6 +152,6 @@
 </div>
 <script>
     jQuery("document").ready(function () {
-        get_device_list()
+        get_device_list();
     });
 </script>

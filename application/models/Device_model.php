@@ -73,10 +73,10 @@ class Device_model extends CI_Model {
                 $nestedData = array();
                 $nestedData[] = $cnt++;
 
-                $nestedData[] = isset($row['title']) && !empty($row['title']) && is_numeric($row['title']) ? $row['title'] : "N/A";
-                $nestedData[] = isset($row['sub_title']) && !empty($row['allowed_project']) && is_numeric($row['allowed_project']) ? getProject(array("projectcode" => $row['allowed_project']))[0]->projectname : "<span style='color:green'>" . strtoupper($row['allowed_project']) . "</span>";
-                $nestedData[] = isset($row['signal_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
-                $nestedData[] = isset($row['device_type']) ? getTableData($this->tbl_roles, array("group_id" => $row['role_id']))[0]->name : '<span style="color:red">Not Available</span>';
+                $nestedData[] = isset($row['title']) && !empty($row['title']) ? $row['title']: "N/A";
+                $nestedData[] = isset($row['sub_title'])?$row['sub_title']:"";
+                $nestedData[] = isset($row['signal_type']) ?$row['signal_type']:'' ;
+                $nestedData[] = isset($row['device_type']) ?$row['device_type']:'' ;
                 $nestedData[] = isset($row['sensor_name']) ? $row['sensor_name'] : "";
 
                 $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
@@ -84,19 +84,11 @@ class Device_model extends CI_Model {
                 $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
                 $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
                 $nestedData[] = isset($row['created']) ? $row['created'] : "";
-//            prd($row['group_id']);
-                $sensorName = ($row['sensor_name']);
-                $delFxn = "deleteUser('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
-                        "','" . $this->security->get_csrf_hash() . "')";
-                $nestedData[] = " <button class='btn btn-success btn-xs' id='showUpdatePopup' name='showUpdatePopup'"
-                        . " onclick=showUpdatePopup('" . $encUserId . "','" . $this->security->get_csrf_token_name() .
-                        "','" . $this->security->get_csrf_hash() . "')>" . User_lang::BUTTON_UPDATE . "</button> "
-                        . "<button class='btn btn-danger btn-xs' onclick=$delFxn>" . User_lang::BUTTON_DELETE . "</button> ";
-
+                $nestedData[] = 
+                
                 $data[] = $nestedData;
             }
         }
-        
         $data = array(
             "draw" => intval($requestData['draw']) > 0 ? $requestData['draw'] : 0, // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
             "recordsTotal" => intval($totalData), // total number of records
@@ -107,7 +99,7 @@ class Device_model extends CI_Model {
         return $data;
     }
 
-    public function add_device_detail(array $data) {
+public function add_device_detail(array $data) {
         $data_to_store = $this->security->xss_clean($data);
         $ret = $this->db->insert($this->tbl_device, $data_to_store);
 //        echo $this->db->last_query();
@@ -117,6 +109,26 @@ class Device_model extends CI_Model {
             return true;
         } else {
             //actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+    public function addUser(array $data) {
+        $data_to_store = $this->security->xss_clean($data);
+        $ret = $this->db->insert($this->tbl_users, $data_to_store);
+//        echo $this->db->last_query();
+//        die;
+        if ($ret) {
+            actionTrail("User Add action performed", User_lang::ACTION_TRAIL_SUCCESS);
+            return true;
+        } else {
+            actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
             return false;
         }
     }
