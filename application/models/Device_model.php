@@ -80,11 +80,11 @@ class Device_model extends CI_Model {
                 $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
                 $nestedData[] = isset($row['created']) ? date("d-M-Y H:i:s",strtotime($row['created'])) : "";
                 $device_id = encryptMyData($row['device_id']);
-                $api_call_modal = "<button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#api_call_modal'>Api</button>";
+               
                 $update_btn = "<button class='btn btn-success btn-xs' id='btn_update' name='btn_update' onclick=open_update_device_popup('".$device_id."')  data-toggle='modal' data-target='#myModal'>".$this->lang->line('icon_pencil').'</button>';
                 
                 $del_btn = " <button onclick=delete_device('".$device_id."') name='btn_delete' class='btn btn-danger btn-xs'>".$this->lang->line('icon_trash').'</button>';
-                $nestedData[] = $api_call_modal.$update_btn.$del_btn;
+                $nestedData[] = $update_btn.$del_btn;
                 
                 $data[] = $nestedData;
             }

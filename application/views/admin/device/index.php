@@ -8,7 +8,8 @@
                 <div class="card-body">
                     <h4 class="card-title" style="display: inline;">Listing Device</h4>
                     <h6 class="card-subtitle" style="display: inline;"> (List Of Device added)</h6>
-                    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal" id="newDevice"><i class="fa fa-plus-circle" aria-hidden="true"></i> New Device</button>
+                     <button class='btn btn-primary pull-right' data-toggle='modal' data-target='#api_call_modal' style="margin-left: 2px;">Api Details</button> 
+                    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal" id="newDevice"><i class="fa fa-plus-circle" aria-hidden="true"></i> New Device</button> 
                     <div class="table-responsive m-t-0">
                         <table id="deviceTable" class="table table-bordered table-striped" width='100%'>
                             <thead>
@@ -222,7 +223,7 @@
                                                 <td>https://www.gadgetprogrammers.online/iothulk/store-reading/YOUR_API_KEY/YOUR_DEVICE_ID/SENSOR_VALUE</td>
                                             </tr>
 
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
