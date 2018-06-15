@@ -6,9 +6,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Listing Device</h4>
-                    <h6 class="card-subtitle">List Of Device added</h6>
-                    <button class="btn btn-success" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle" aria-hidden="true"></i> New Device</button>
+                    <h4 class="card-title" style="display: inline;">Listing Device</h4>
+                    <h6 class="card-subtitle" style="display: inline;"> (List Of Device added)</h6>
+                    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal" id="newDevice"><i class="fa fa-plus-circle" aria-hidden="true"></i> New Device</button>
                     <div class="table-responsive m-t-0">
                         <table id="deviceTable" class="table table-bordered table-striped" width='100%'>
                             <thead>
@@ -16,14 +16,16 @@
                                     <th>S.no.</th>
                                     <th>Title</th>
                                     <th>Sub Title</th>
-                                    <th>Signal Type</th>
-                                    <th>Device Type</th>
+                                    <th>Device Code</th>
+                                    <th>SignalType</th>
+                                    <th>DeviceTypes</th>
                                     <th>Sensor</th>
                                     <th>Min Val.</th>
                                     <th>Max Val.</th>
                                     <th>Purpose</th>
                                     <th>Max Allowed Req.</th>
                                     <th>Created on</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -42,7 +44,7 @@
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <!-- <h4 class="modal-title">Add Device</h4> -->
+                            <h4 class="modal-title">Device Info</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
@@ -51,8 +53,8 @@
                             <div class="card-body">
                                 <form action="#" id="frm_device">
                                     <div class="form-body">
-                                        <h3 class="card-title m-t-15">Device Info</h3>
-                                        <hr>
+                                        <!-- <h3 class="card-title m-t-15">Device Info</h3> -->
+                                        <!-- <hr> -->
                                         <div class="row p-t-20">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -76,9 +78,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Signal Type</label>
-                                                    <select class="form-control custom-select" name="signal_type" id="signal_type">
+                                                    <select class="form-control custom-select" name="signal_type" id="signal_type" onchange="change_device_type();">
                                                         <option value="1">Digital</option>
-                                                        <option value="2">Analog</option>
+                                                        <option value="2">Analog / Value</option>
                                                     </select>
                                                     <!--<small class="form-control-feedback"> Select your gender </small>--> 
                                                 </div>
@@ -88,7 +90,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Device Type</label>
                                                         <select class="form-control custom-select" name="device_type" id="device_type">
-                                                            <option value="1">Single Value (sensor)</option>
+                                                            <option value="1">Single Value (T/F)</option>
                                                             <option value="2">GPS (LAT. LONG.)</option>
                                                         </select>
                                                 </div>
@@ -128,6 +130,7 @@
                                                     <textarea class="form-control" name="short_desc" id="short_desc" placeholder="Short Description"></textarea>
                                                 </div>
                                             </div>
+                                            <input type='hidden' name="device_id" id="device_id">
                                             <!--/span-->
                                         </div>
                                     </div>
@@ -138,7 +141,8 @@
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="saveDevice"> <i class="fa fa-check"></i> Save</button>
+                            <button type="button" class="btn btn-success" id="saveDevice"> <i class="fa fa-check"></i> Save</button>
+                            <button type="button" class="btn btn-success" onclick="update_device($('#device_id').val())" id="updateDevice"> <i class="fa fa-check"></i> Update</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
 
@@ -146,6 +150,37 @@
                 </div>
             </div>
             <!------------------Model Ends Here----------------------------------->
+
+            <!--------------  Sensor Values Modal Starts Here------------->
+                 <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Device Info</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="saveDevice"> <i class="fa fa-check"></i> Save</button>
+                            <button type="button" class="btn btn-success" onclick="update_device($('#device_id').val())" id="updateDevice"> <i class="fa fa-check"></i> Update</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--------------  Sensor Values Modal Ends Here------------->
         </div>
     </div>
     <!-- End PAge Content -->
@@ -153,5 +188,6 @@
 <script>
     jQuery("document").ready(function () {
         get_device_list();
+        change_device_type();
     });
 </script>

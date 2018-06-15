@@ -43,8 +43,8 @@ $api_key = $sess_data['userdata']['api_key'];
             <h3 class="text-primary">Dashboard <span class="pull-right">
                     API-KEY 
                     <i class="fa fa-key"></i>
-                    <input type="text" readonly="true" class="btn btn-warning btn-xs" style="width:170px" data-toggle="tooltip" title="Click to Copy Key!" onclick="copy_clipboard()" id="apikey" value="<?php echo $api_key; ?>">
-                </span></h3> 
+                    <input type="text" readonly="true" class="btn btn-warning btn-sm" style="width:170px;" data-toggle="tooltip" title="Click to Copy Key!" onclick="copy_clipboard(this.id)" id="apikey" value="<?php echo $api_key; ?>">
+                </h3> 
             
         </div>
         <div class="col-md-7 align-self-center">
@@ -76,8 +76,8 @@ $api_key = $sess_data['userdata']['api_key'];
 
     <script>
 //        var jq = $.noConflict();
-        function copy_clipboard() {
-            var copyText = document.getElementById("apikey");
+        function copy_clipboard(element_id) {
+            var copyText = document.getElementById(element_id);
             copyText.select();
             //alert(copyText.select());
 

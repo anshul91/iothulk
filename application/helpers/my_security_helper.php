@@ -87,7 +87,7 @@ function decryptMyData($decrypt, $salt = '', $secretIv = '') {
 
 function checkForDdos() {
     // Assuming session is already started
-    $ci = $ci = &get_instance();
+    $ci = &get_instance();
     $uri = md5($_SERVER['REQUEST_URI']);
     $exp = 1; // 3 seconds
     $hash = $uri . '|' . time();
@@ -110,4 +110,16 @@ function getSha256($string) {
 
 function getSha512($string) {
     return hash("sha512", $string);
+}
+
+function check_authUser($api_key){
+    $ci = &get_instance();
+
+    $data = getTableData("tbl_api_key",array('api_key'=>$api_key,'cols'=>array('user_id')));
+    
+    if(is_array($data) && count($data[0])>0){
+        return $data[0]->user_id;
+    }else{
+        return false;
+    }
 }

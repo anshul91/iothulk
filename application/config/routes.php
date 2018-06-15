@@ -54,5 +54,11 @@ $route['logout'] = 'Admin_user/logout';
 $route['login'] = 'Admin_user/login';
 $route['signup'] = 'Admin_user/signup';
 $route['device-list'] = 'Admin_device/index';
+
+$route['store-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device/store_device_reading/$1/$2/$3';
+$route['store-gps-reading/(:any)/(:any)/(:any)/(:any)']['get'] = 'Admin_device/store_gps_device_reading/$1/$2/$3/$4';
+$route['get-device-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device/get_device_reading/$1/$2/$3';
+$route['get-device-reading/(:any)/(:any)']['get'] = 'Admin_device/get_device_reading/$1/$2';
 $route['404_override'] = '';
+
 $route['translate_uri_dashes'] = FALSE;

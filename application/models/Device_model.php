@@ -11,34 +11,22 @@ if (!defined('BASEPATH'))
 
 class Device_model extends CI_Model {
 
-    /**
-     * Validate the login's data with the database
-     * @param string $user_name
-     * @param string $password
-     * @return void
-     */
+   
     public $tbl_users = "tbl_users";
     public $tbl_api_key = "tbl_api_key";
     public $tbl_device = "tbl_device";
+    public $tbl_device_reading = 'tbl_device_reading';
 
-    public function signup($data) {
-        $data_to_store = $this->security->xss_clean($data);
-        $ret = $this->db->insert($this->tbl_users, $data_to_store);
-        if ($ret) {
-            $insert_id = $this->db->insert_id();
-            $api_data = array("user_id" => $insert_id, "api_key" => time() . rand(), "updated" => date("Ymd"));
-            if ($this->db->insert($this->tbl_api_key, $api_data))
-                return true;
-            else
-                return false;
-        } else
-            return false;
-    }
-
+     /**
+     * Validate the login's data with the database
+     * @param array $filter
+     
+     * @return array
+     */
     public function get_device_list($filter = array()) {
         $columns = array('device_id', 'title', 'sub_title', 'signal_type', 'device_type',
             'description', 'short_desc', 'min_val', 'max_val', 'sensor_name', 't1.created',
-            't1.modified', 'created_by', 'purpose', 'max_request');
+            't1.modified', 't1.user_id', 'purpose', 'max_request','device_code');
 //        $remCols = array('userid', 'allowed_dist', "allowed_project", "role_id"); //columns to be removed from datatable
         $requestData = rq();
         $cols = implode(",", $columns);
@@ -53,7 +41,7 @@ class Device_model extends CI_Model {
             }
         }
         $sql = "SELECT $cols ";
-        $sql.=" from $this->tbl_device as t1 left join $this->tbl_users as t2 on t1.created_by=t2.user_id " .
+        $sql.=" from $this->tbl_device as t1 left join $this->tbl_users as t2 on t1.user_id=t2.user_id " .
                 " $cond ";
         $query = $this->db->query($sql);
         $totalData = $query->num_rows();
@@ -72,19 +60,30 @@ class Device_model extends CI_Model {
             foreach ($resData as $rk => $row) {  // preparing an array
                 $nestedData = array();
                 $nestedData[] = $cnt++;
+                $device_code = '<input type="text" readonly="true" class="btn btn-primary btn-sm" data-toggle="tooltip" title="" onclick="copy_clipboard(this.id)" id="device_code" value="'.$row['device_code'].'" data-original-title="Click to Copy!">';
 
                 $nestedData[] = isset($row['title']) && !empty($row['title']) ? $row['title']: "N/A";
                 $nestedData[] = isset($row['sub_title'])?$row['sub_title']:"";
-                $nestedData[] = isset($row['signal_type']) ?$row['signal_type']:'' ;
-                $nestedData[] = isset($row['device_type']) ?$row['device_type']:'' ;
+                
+                $nestedData[] = isset($row['device_code'])?$device_code:"";
+
+
+                $nestedData[] = isset($row['signal_type']) && $row['signal_type']==1 ?'<span class="btn btn-info btn-sm"><i class="fa fa-signal"></i> Digital</span>':'<span class="btn btn-info btn-sm"><i class="fa fa-signal"></i> Analog</span>' ;
+
+                $nestedData[] = isset($row['device_type']) && $row['device_type']==1 ?'<span class="btn btn-danger btn-sm"><i class="fa fa-thermometer"></i> SensorReading</span>':'<span class="btn btn-danger btn-sm"><i class="fa fa-crosshairs"></i> GPS</span>' ;
+
                 $nestedData[] = isset($row['sensor_name']) ? $row['sensor_name'] : "";
 
                 $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
                 $nestedData[] = isset($row['max_val']) ? $row['max_val'] : "";
                 $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
                 $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
-                $nestedData[] = isset($row['created']) ? $row['created'] : "";
-                $nestedData[] = 
+                $nestedData[] = isset($row['created']) ? date("d-M-Y H:i:s",strtotime($row['created'])) : "";
+                $device_id = encryptMyData($row['device_id']);
+                $update_btn = "<button class='btn btn-success btn-xs' id='btn_update' name='btn_update' onclick=open_update_device_popup('".$device_id."')  data-toggle='modal' data-target='#myModal'>".$this->lang->line('icon_pencil').'</button>';
+                
+                $del_btn = " <button onclick=delete_device('".$device_id."') name='btn_delete' class='btn btn-danger btn-xs'>".$this->lang->line('icon_trash').'</button>';
+                $nestedData[] = $update_btn.$del_btn;
                 
                 $data[] = $nestedData;
             }
@@ -112,132 +111,40 @@ public function add_device_detail(array $data) {
             return false;
         }
     }
-
-
-
-
-
-
-
-    public function addUser(array $data) {
+public function update_device_detail($device_id,array $data) {
         $data_to_store = $this->security->xss_clean($data);
-        $ret = $this->db->insert($this->tbl_users, $data_to_store);
+        
+        $ret = $this->db->update($this->tbl_device, $data_to_store,array("device_id"=>$device_id));
 //        echo $this->db->last_query();
 //        die;
         if ($ret) {
-            actionTrail("User Add action performed", User_lang::ACTION_TRAIL_SUCCESS);
+            //actionTrail("User Add action performed", User_lang::ACTION_TRAIL_SUCCESS);
             return true;
         } else {
-            actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
+            //actionTrail("User Add Action Performed", User_lang::ACTION_TRAIL_ERROR);
             return false;
         }
     }
 
-    public function updateUser($userid, array $data) {
+    public function delete_device($device_id){
+         return $this->db->delete($this->tbl_device, array("device_id" => $device_id)) ? true:false;
+    }
+      /*
+        =====================================================================================
+                            CREATING REST API FUNCTIONS FOR DEVICES MODULE
+        ===================================================================================== 
+    */
+
+    public function store_device_reading( array $data){
+        
         $data_to_store = $this->security->xss_clean($data);
-        $ret = $this->db->update($this->tbl_users, $data_to_store, array("userid" => $userid));
-        //echo $this->db->last_query();
-        //die;
-        if ($ret) {
-            actionTrail("User Update action performed", User_lang::ACTION_TRAIL_SUCCESS);
-            return true;
-        } else {
-            actionTrail("User Update Action Performed", User_lang::ACTION_TRAIL_ERROR);
-            return false;
-        }
+        $ret = $this->db->insert($this->tbl_device_reading,$data_to_store);
+        return $ret ? true : false;
+    
     }
-
-    public function generateUserId() {
-        $res = $this->db->query("select max(userid) as userid from $this->tbl_users");
-        if ($res->num_rows() > 0) {
-            $result = $res->result();
-            return $result[0]->userid + 1;
-        } else {
-            return 1;
-        }
+    public function store_gps_device_reading( array $data){
+        $data_to_store = $this->security->xss_clean($data);
+        $ret = $this->db->insert($this->tbl_device_reading,$data_to_store);
+        return $ret ? true : false;
     }
-
-    public function addUserPermissions($userid, array $data) {
-
-        if ($this->deleteDuplicatePermission($userid)) {
-            $this->db->insert_batch($this->tbl_user_role_permission, $data);
-//            prd($this->db->last_query());
-            if ($this->db->affected_rows() < 1) {
-                actionTrail("Add User Permission details Insert operation performed", "Unsuccessful!");
-                return false;
-            } else {
-                actionTrail("Add User Permission details Insert Operation Performed", "Successful!");
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public function deleteDuplicatePermission($userid) {
-        $flag = true;
-        $this->db->select("*");
-        $count = $this->db->where(array("userid" => $userid))->get($this->tbl_user_role_permission)->num_rows();
-        if ($count > 0)
-            $flag = $this->db->delete($this->tbl_user_role_permission, array("userid" => $userid));
-//         echo $this->db->last_query();        
-        return $flag;
-    }
-
-    public function checkDuplicateUser($userid, $username) {
-        $query = "Select count(*) from $this->tbl_roles where userid!=? and username=?";
-        if ($res = $this->db->query($query, array($userid, $username))) {
-            $data = $res->result();
-            return ($data[0]->count > 0) ? false : true;
-        }
-    }
-
-    public function getPermissions($userId) {
-        $query = "select t1.permission_user_id, t1.group_id, t1.page_id, t1.read, t1.creat, t1.update, "
-                . "t1.delete,t2.ciroutes,t2.text from $this->tbl_user_role_permission as t1 left join "
-                . "$this->tbl_menu as t2 on t1.page_id = t2.menuid where t1.userid=?";
-        $res = $this->db->query($query, array($userId));
-//        echo $this->db->last_query();die;   
-        return $res->num_rows() > 0 ? $res->result_array() : false;
-    }
-
-    public function getAllVacantPosts($filter = array()) {
-        $cond = "";
-        if (isset($filter['distId']) && $filter['distId'] != "") {
-            $cond .= " and d.distid='" . $filter['distId'] . "' ";
-        }
-
-        $sql = "select "
-                . "(select COUNT(*)  from AWC_Master ab inner join SecMaster sb on sb.SectorID=ab.SectorID inner join ProjectMaster pb on pb.ProjectCode=sb.ProjectCode where ab.DelFlag is null and sb.DelFlag is NULL and ab.SectorID is not null and d.distid=pb.distid and ab.PAWCID not in (select AWCID from Employee_Master ec inner join AWC_Master ac on ac.PAWCID=ec.AWCID inner  join SecMaster sc on sc.SectorID=ac.SectorID inner join ProjectMaster pc on pc.ProjectCode=sc.ProjectCode where ec.DesignationId=1 and pc.distid=d.distid and ec.DelFlag is null and ac.DelFlag is null and sc.DelFlag is NULL)) as AWWVacant, "
-                . " (select COUNT(*) from AWC_Master af inner join SecMaster sf on sf.SectorID=af.SectorID inner join ProjectMaster pf on pf.ProjectCode=sf.ProjectCode where af.DelFlag is null and sf.DelFlag is NULL and af.SectorID is not null and pf.distid=d.distid and af.PAWCID not in (select AWCID from Employee_Master eg inner join AWC_Master ag on ag.PAWCID=eg.AWCID inner  join SecMaster sg on sg.SectorID=ag.SectorID inner join ProjectMaster pg on pg.ProjectCode=sg.ProjectCode where eg.DesignationId=2 and pg.distid=d.distid and eg.DelFlag is null and ag.DelFlag is null and sg.DelFlag is NULL)) as AWHVacant,"
-                . " (select COUNT(*) from AWC_Master aj inner join SecMaster sj on sj.SectorID=aj.SectorID inner join ProjectMaster pj on pj.ProjectCode=sj.ProjectCode where aj.DelFlag is null and sj.DelFlag is NULL and aj.SectorID is not null and pj.distid=d.distid and aj.PAWCID not in (select AWCID from Employee_Master ek inner join AWC_Master ak on ak.PAWCID=ek.AWCID inner  join SecMaster sk on sk.SectorID=ak.SectorID inner join ProjectMaster pk on pk.ProjectCode=sk.ProjectCode where ek.DesignationId=3 and pk.distid=d.distid and ek.DelFlag is null and ak.DelFlag is null and sk.DelFlag is NULL)) as AshaVacant,"
-                . " (select COUNT(*) from AWC_Master an inner join SecMaster sn on sn.SectorID=an.SectorID inner join ProjectMaster pn on pn.ProjectCode=sn.ProjectCode where an.DelFlag is null and sn.DelFlag is NULL and an.SectorID is not null and pn.distid=d.distid and an.PAWCID not in (select AWCID from Employee_Master eo inner join AWC_Master ao on ao.PAWCID=eo.AWCID  inner  join SecMaster so on so.SectorID=ao.SectorID inner join ProjectMaster po on po.ProjectCode=so.ProjectCode where eo.DesignationId=4 and eo.DelFlag is null and po.distid=d.distid and ao.DelFlag is null and so.DelFlag is NULL)) as MiniAWWVacant "
-                . "  from distmaster d where 1=1 ";
-        $totRes = $this->db->query($sql . $cond);
-//         echo $this->db->last_query();die;
-        return $res = $totRes->num_rows() > 0 ? $totRes->result() : false;
-    }
-
-    public function getVacantPostsProjectWise($filter = array()) {
-        $cond = "";
-        if (isset($filter['distId']) && $filter['distId'] != "") {
-            $cond .= " and p.distid='" . $filter['distId'] . "' ";
-        }
-        if (isset($filter['projectcode']) && $filter['projectcode'] != "") {
-            $cond .= " and p.projectcode='" . $filter['projectcode'] . "' ";
-        }
-
-        $sql = "select p.projectname,p.projectcode,"
-                . "(select COUNT(*) from AWC_Master aa left outer join ProjectMaster pa on pa.ProjectCode=aa.ProjectCode where aa.sectorid is not null and aa.DelFlag is NULL and pa.projectcode=p.projectcode) as mappedawc,"
-                . "(select COUNT(*)  from AWC_Master ab inner join SecMaster sb on sb.SectorID=ab.SectorID inner join ProjectMaster pb on pb.ProjectCode=sb.ProjectCode where ab.DelFlag is null and sb.DelFlag is NULL and ab.SectorID is not null and p.projectcode=pb.projectcode and ab.PAWCID not in (select AWCID from Employee_Master ec inner join AWC_Master ac on ac.PAWCID=ec.AWCID inner  join SecMaster sc on sc.SectorID=ac.SectorID inner join ProjectMaster pc on pc.ProjectCode=sc.ProjectCode where ec.DesignationId=1 and pc.projectcode=p.projectcode and ec.DelFlag is null and ac.DelFlag is null and sc.DelFlag is NULL)) as AWWVacant,"
-                . "(select COUNT(*) from AWC_Master af inner join SecMaster sf on sf.SectorID=af.SectorID inner join ProjectMaster pf on pf.ProjectCode=sf.ProjectCode where af.DelFlag is null and sf.DelFlag is NULL and af.SectorID is not null and pf.projectcode=p.projectcode and af.PAWCID not in (select AWCID from Employee_Master eg inner join AWC_Master ag on ag.PAWCID=eg.AWCID  inner  join SecMaster sg on sg.SectorID=ag.SectorID inner join ProjectMaster pg on pg.ProjectCode=sg.ProjectCode where eg.DesignationId=2 and pg.projectcode=p.projectcode and eg.DelFlag is null and ag.DelFlag is null and sg.DelFlag is NULL)) as AWHVacant,"
-                . " (select COUNT(*) from AWC_Master aj inner join SecMaster sj on sj.SectorID=aj.SectorID inner join ProjectMaster pj on pj.ProjectCode=sj.ProjectCode where aj.DelFlag is null and sj.DelFlag is NULL and aj.SectorID is not null and pj.projectcode=p.projectcode and aj.PAWCID not in (select AWCID from Employee_Master ek inner join AWC_Master ak on ak.PAWCID=ek.AWCID  inner  join SecMaster sk on sk.SectorID=ak.SectorID inner join ProjectMaster pk on pk.ProjectCode=sk.ProjectCode where ek.DesignationId=3 and pk.projectcode=p.projectcode and ek.DelFlag is null and ak.DelFlag is null and sk.DelFlag is NULL)) as AshaVacant,"
-                . " (select COUNT(*) from AWC_Master an inner join SecMaster sn on sn.SectorID=an.SectorID inner join ProjectMaster pn on pn.ProjectCode=sn.ProjectCode where an.DelFlag is null and sn.DelFlag is NULL and an.SectorID is not null and pn.projectcode=p.projectcode and an.PAWCID not in (select AWCID from Employee_Master eo inner join AWC_Master ao on ao.PAWCID=eo.AWCID  inner  join SecMaster so on so.SectorID=ao.SectorID inner join ProjectMaster po on po.ProjectCode=so.ProjectCode where eo.DesignationId=4 and eo.DelFlag is null and po.projectcode=p.projectcode and ao.DelFlag is null and so.DelFlag is NULL)) as MiniAWWVacant"
-                . "  from projectmaster p where 1=1   ";
-
-        $totRes = $this->db->query($sql . $cond);
-//        echo $this->db->last_query();die;
-        return $res = $totRes->num_rows() > 0 ? $totRes->result() : false;
-    }
-
 }
