@@ -320,7 +320,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
                                         <li><a href="#"><i class="ti-wallet"></i> Balance</a></li>
                                         <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
                                         <li><a href="#"><i class="ti-settings"></i> Setting</a></li>
-                                        <li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                                        <li><a href="<?php echo site_url('logout');?>"><i class="fa fa-power-off"></i> Logout</a></li>
                                     </ul>
                                 </div>
                             </li>
