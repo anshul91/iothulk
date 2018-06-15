@@ -151,29 +151,89 @@
             </div>
             <!------------------Model Ends Here----------------------------------->
 
-            <!--------------  Sensor Values Modal Starts Here------------->
+            <!--------------  Modal api url Starts Here------------->
                  <!-- The Modal -->
-            <div class="modal" id="myModal">
+            <div class="modal" id="api_call_modal">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Device Info</h4>
+                            <h4 class="modal-title">API Information for Device</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <div class="card-body">
-                                
+                            <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-title">
+                               
+
                             </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        
+                                        <tbody>
+                                        <tr>
+                                                
+                                                <td colspan="2" style="text-align: center;">
+                                                    <h3>Store Sensor Value 
+                                                        <small>(Only non gps value)</small>
+                                                    </h3>
+                                                    
+                                                    
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" style="color:Red;">API-NAME</th>
+                                                <td>Store Sensor Value <small>(Only non gps value)</small></td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" style="color:green"> CALL METHOD</th>
+                                                <td style="color:green;">store-reading</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">REQUEST METHOD</th>
+                                                <td style="color:red">GET</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th scope="row">BASE URL</th>
+                                                <td>https://www.gadgetprogrammers.online/iothulk/</td>
+                                            </tr>
+                                           <tr>
+                                                <th scope="row">PARAMETER 1</th>
+                                                <td>API KEY (Given on dashboard)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PARAMETER 2</th>
+                                                <td>Device Id (Given in device List)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PARAMETER 3</th>
+                                                <td>Sensor Value </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Example: </th>
+                                                <td>https://www.gadgetprogrammers.online/iothulk/store-reading/YOUR_API_KEY/YOUR_DEVICE_ID/SENSOR_VALUE</td>
+                                            </tr>
+
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         </div>
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-success" id="saveDevice"> <i class="fa fa-check"></i> Save</button>
-                            <button type="button" class="btn btn-success" onclick="update_device($('#device_id').val())" id="updateDevice"> <i class="fa fa-check"></i> Update</button>
+                           
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
 

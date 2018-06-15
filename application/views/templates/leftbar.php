@@ -18,8 +18,8 @@ $api_key = $sess_data['userdata']['api_key'];
                         <li><a href="#">Sandbox </a></li>
                     </ul>
                 </li>
-                <li class="nav-label">My devices</li>
-                <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-laptop"></i>
+                <li class="nav-label" id="devices">My devices</li>
+                <li> <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-laptop"></i>
                         <span class="hide-menu">Device</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="device-list">List Device</a></li>
@@ -55,6 +55,31 @@ $api_key = $sess_data['userdata']['api_key'];
             </ol>
         </div>
     </div>
+    <!--- Start Tour-->
+   
+<script>
+// Instance the tour
+var tour = new Tour({
+  steps: [
+  {
+    element: "#devices",
+    title: "Device Info",
+    content: "Please Add Device info to take sesnor values online."
+  },
+  {
+    element: "#devices1",
+    title: "Title of my step",
+    content: "Content of my step"
+  }
+]});
+
+// Initialize the tour
+tour.init();
+
+// Start the tour
+tour.start();
+</script>
+    <!--End Tour-->
     <!-- End Bread crumb -->
     <!-- Container fluid  -->
 

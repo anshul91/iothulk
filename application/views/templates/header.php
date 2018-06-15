@@ -16,6 +16,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
         <link href="<?php echo CSS_URL; ?>lib/bootstrap/bootstrap.min.css" rel="stylesheet">
         <!-- Custom CSS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
         <link href="<?php echo CSS_URL; ?>lib/calendar2/semantic.ui.min.css" rel="stylesheet">
         <link href="<?php echo CSS_URL; ?>lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
         <link href="<?php echo CSS_URL; ?>lib/owl.carousel.min.css" rel="stylesheet" />
@@ -28,6 +29,9 @@ $sess_userdata = $sess_userdata['userdata'][0];
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/css/bootstrap-tour-standalone.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour-standalone.min.js"></script>
 
 
         <!--        <meta name="viewport" content="width=device-width, initial-scale=1">
