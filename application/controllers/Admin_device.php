@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -24,7 +25,9 @@ class Admin_device extends CI_Controller {
     }
     
     public function get_device_list(){
-        $data = $this->Device_model->get_device_list();
+        $user_detail = getSessionUserDetail();
+        
+        $data = $this->Device_model->get_device_list(array("user_id"=>$user_detail->user_id));
         echo json_encode($data);
         exit;
     }
@@ -50,7 +53,8 @@ class Admin_device extends CI_Controller {
                     "device_type" => rq("device_type"),
                     "purpose" => rq("purpose"),
                     "description" => rq("description"),
-                    "short_desc" => rq("sub_description"),
+                    "sensor_name"=>rq('sensor_name'),
+                    "short_desc" => rq("sub_desc"),
                     "device_code"=>time().rand(0,999),
                     "user_id"=>$this->session->userdata('admin_userdata')['userdata'][0]->user_id
                 );
@@ -130,6 +134,7 @@ public function update_device_detail(){
 
     public function get_device_detail(){
         $device_id = rqs('device_id');
+
         $device_resp_data[0] = new stdClass();//array();
         if($device_id!='' && is_numeric($device_id)){
             $device_data = getTableData($this->tbl_device,array('device_id'=>$device_id));
@@ -156,7 +161,32 @@ public function update_device_detail(){
         }
         exit;
     }
-
+ /*
+        =====================================================================================
+                            FUNCTIONS FOR DEVICES READING 
+        ===================================================================================== 
+*/
+    /*
+    * @usage : Show device reading list using ajax
+    */
+    public function get_device_reading_view(){
+        ob_clean();
+        $device_code = rq('device_code');
+        $data['device_code'] = $device_code;
+        echo $this->load->view('admin/device/device_reading',$data,true);
+        exit;
+    }
+    /*
+        @usage : Loading Device Reading for datatable
+    */
+    public function get_device_reading_list(){
+        $device_code = rqs('device_code');
+        if($device_code=='' || !is_numeric($device_code))
+            return false;
+        $user_detail = getSessionUserDetail();
+        $data = $this->Device_model->get_device_reading_list(array("user_id"=>$user_detail->user_id,'device_code'=>$device_code));
+        echo json_encode($data);
+    }
 
     /*
         =====================================================================================
@@ -187,7 +217,7 @@ public function update_device_detail(){
                if($device_detail[0]->device_type !=1){
                     exit(json_encode(array("status"=>0,'msg_type'=>'info','msg'=>'This is not Sensor Device (please change your device type).')));
                 }
-               else if($this->Device_model->store_device_reading(array("device_id"=>$device_code,"sensor_reading"=>$sensor_reading,'user_id'=>$user_id))){
+               else if($this->Device_model->store_device_reading(array("device_code"=>$device_code,"sensor_reading"=>$sensor_reading,'user_id'=>$user_id))){
                     echo json_encode(array('status'=>1,"msg_type"=>'success','msg'=>'Device Value Stored Successfully at:'.date('Y-m-d H:i:s')));
                     exit;
                 }else{
@@ -279,5 +309,7 @@ public function update_device_detail(){
         exit;
     }
     
+
+
 }
 

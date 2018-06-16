@@ -1,3 +1,6 @@
+ <?php 
+ $tot_device = isset($tot_device) && count($tot_device)>0 ?$tot_device:"0";
+ ?>
  <div class="container-fluid">
                 <!-- Start Page Content -->
                 <div class="row">
@@ -5,11 +8,11 @@
                         <div class="card p-30">
                             <div class="media">
                                 <div class="media-left meida media-middle">
-                                    <span><i class="fa fa-usd f-s-40 color-primary"></i></span>
+                                    <span><i class="fa fa-laptop f-s-40 color-primary"></i></span>
                                 </div>
                                 <div class="media-body media-text-right">
-                                    <h2>568120</h2>
-                                    <p class="m-b-0">Total Revenue</p>
+                                    <h2><?php echo $tot_device;?></h2>
+                                    <p class="m-b-0">Total Device</p>
                                 </div>
                             </div>
                         </div>
@@ -101,87 +104,37 @@
                     </div>
                     <!-- column -->
                 </div>
+                <?php if(is_array($feedback)){?>
                 <div class="row">
 					<div class="col-lg-3">
                         <div class="card bg-dark">
                             <div class="testimonial-widget-one p-17">
                                 <div class="testimonial-widget-one owl-carousel owl-theme">
+                                <?php
+                                        foreach($feedback as $k=>$v){
+                                            
+                                            $user_data = getTableData('tbl_users',array($v->user_id));
+                                            $username = strtoupper(explode(" ",$user_data[0]->username)[0]);
+                                ?>
                                     <div class="item">
                                         <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/2.jpg" alt="" />
-                                            <div class="testimonial-author">John</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
+                                            <!-- <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/2.jpg" alt="" /> -->
+                                            <div class="testimonial-author"><?php echo $username;?></div>
+                                            <div class="testimonial-author-position">Prime User</div>
 
                                             <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
+                                                <i class="fa fa-quote-left"></i><?php echo $v->feedback;?>
                                                 <i class="fa fa-quote-right"></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/3.jpg" alt="" />
-                                            <div class="testimonial-author">Abraham</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
-
-                                            <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
-                                                <i class="fa fa-quote-right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/1.jpg" alt="" />
-                                            <div class="testimonial-author">Lincoln</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
-
-                                            <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
-                                                <i class="fa fa-quote-right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/4.jpg" alt="" />
-                                            <div class="testimonial-author">TYRION LANNISTER</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
-
-                                           <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
-                                                <i class="fa fa-quote-right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/5.jpg" alt="" />
-                                            <div class="testimonial-author">TYRION LANNISTER</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
-
-                                            <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
-                                                <i class="fa fa-quote-right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="testimonial-content">
-                                            <img class="testimonial-author-img" src="<?php echo IMAGE_URL;?>avatar/6.jpg" alt="" />
-                                            <div class="testimonial-author">TYRION LANNISTER</div>
-                                            <div class="testimonial-author-position">Founder-Ceo. Dell Corp</div>
-
-                                            <div class="testimonial-text">
-                                                <i class="fa fa-quote-left"></i>  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation .
-                                                <i class="fa fa-quote-right"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php }?>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php }?>
                     <div class="col-lg-9">
                         <div class="card">
                             <div class="card-title">

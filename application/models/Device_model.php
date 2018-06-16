@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -36,7 +37,7 @@ class Device_model extends CI_Model {
         if (sizeof($filter) > 0 && is_array($filter)) {
             foreach ($fields as $field) {
                 if (isset($filter[$field]) && array_key_exists($field, $filter)) {
-                    $cond .=" and $field=" . $this->db->escape($filter[$field]);
+                    $cond .=" and t1.$field=" . $this->db->escape($filter[$field]);
                 }
             }
         }
@@ -74,17 +75,19 @@ class Device_model extends CI_Model {
 
                 $nestedData[] = isset($row['sensor_name']) ? $row['sensor_name'] : "";
 
-                $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
-                $nestedData[] = isset($row['max_val']) ? $row['max_val'] : "";
+                // $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
+                // $nestedData[] = isset($row['max_val']) ? $row['max_val'] : "";
                 $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
-                $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
+                // $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
                 $nestedData[] = isset($row['created']) ? date("d-M-Y H:i:s",strtotime($row['created'])) : "";
                 $device_id = encryptMyData($row['device_id']);
-               
-                $update_btn = "<button class='btn btn-success btn-xs' id='btn_update' name='btn_update' onclick=open_update_device_popup('".$device_id."')  data-toggle='modal' data-target='#myModal'>".$this->lang->line('icon_pencil').'</button>';
-                
-                $del_btn = " <button onclick=delete_device('".$device_id."') name='btn_delete' class='btn btn-danger btn-xs'>".$this->lang->line('icon_trash').'</button>';
-                $nestedData[] = $update_btn.$del_btn;
+                $device_code = encryptMyData($row['device_code']);
+                $update_btn = "<button class='btn btn-success btn-sm' id='btn_update' name='btn_update' onclick=open_update_device_popup('".$device_id."')  data-toggle='modal' data-target='#myModal'>".$this->lang->line('icon_pencil').'</button>';
+                $title = implode("-",explode(" ",$row['title']));
+                $show_reading_btn = "<button class='btn btn-info btn-sm' data-toggle='modal' data-target='#sensor_reading_modal' onclick=get_device_reading_view('".$device_code."','".$title."')><i class='fa fa-eye'></i></button>";
+
+                $del_btn = " <button onclick=delete_device('".$device_id."') name='btn_delete' class='btn btn-danger btn-sm'>".$this->lang->line('icon_trash').'</button>';
+                $nestedData[] = $show_reading_btn.$update_btn.$del_btn;
                 
                 $data[] = $nestedData;
             }
@@ -130,6 +133,57 @@ public function update_device_detail($device_id,array $data) {
     public function delete_device($device_id){
          return $this->db->delete($this->tbl_device, array("device_id" => $device_id)) ? true:false;
     }
+
+
+
+    public function get_device_reading_list($filter = array()) {
+        $columns = array('sensor_reading','lat','lon','created');
+        $requestData = rq();
+        $cols = implode(",", $columns);
+        $cond = ' Where 1=1 ';
+        $fields = $this->db->list_fields($this->tbl_device_reading);
+        if (sizeof($filter) > 0 && is_array($filter)) {
+            foreach ($fields as $field) {
+                if (isset($filter[$field]) && array_key_exists($field, $filter)) {
+                    $cond .=" and $field=" . $this->db->escape($filter[$field]);
+                }
+            }
+        }
+        $sql = "SELECT $cols ";
+        $sql.=" from $this->tbl_device_reading $cond ";
+        $query = $this->db->query($sql);
+        $totalData = $query->num_rows();
+        $totalFiltered = $totalData;
+        if (!empty($requestData['search']['value'])) {
+            $sql.=" AND ( sensor_reading LIKE '" . $requestData['search']['value'] . "%' ";
+            $sql.=" OR lat LIKE '" . $requestData['search']['value'] . "%' )";
+        }
+        $sql.=" ORDER BY " . $columns[$requestData['order'][0]['column']] . "   " . $requestData['order'][0]['dir'] . "  LIMIT " . $requestData['length'] . " OFFSET " . $requestData['start'] . "   ";
+        $resArr = $this->db->query($sql);
+        // prd(lastQuery());die;
+        $cnt = $requestData['start'] ? $requestData['start'] + 1 : 1;
+        $data = array();
+        $resData = $resArr->result_array();
+        if (count($resData) > 0) {
+            foreach ($resData as $rk => $row) {  // preparing an array
+                $nestedData = array();
+                $nestedData[] = $cnt++;
+                $nestedData[] = isset($row['sensor_reading']) && !empty($row['sensor_reading']) ? $row['sensor_reading']: "N/A";
+                $nestedData[] = isset($row['lat'])?$row['lat']:"";
+                $nestedData[] = isset($row['lon'])?$row['lon']:"";
+                $nestedData[] = isset($row['created']) ? date("d-M-Y H:i:s",strtotime($row['created'])) : "";
+                $data[] = $nestedData;
+            }
+        }
+        $data = array(
+            "draw" => intval($requestData['draw']) > 0 ? $requestData['draw'] : 0,
+            "recordsTotal" => intval($totalData), // total number of records
+            "recordsFiltered" => intval($totalFiltered), 
+            "data" => $data   // total data array
+        );
+        array_walk_recursive($data, array($this->security, 'xss_clean'));
+        return $data;
+    }
       /*
         =====================================================================================
                             CREATING REST API FUNCTIONS FOR DEVICES MODULE
@@ -140,6 +194,7 @@ public function update_device_detail($device_id,array $data) {
         
         $data_to_store = $this->security->xss_clean($data);
         $ret = $this->db->insert($this->tbl_device_reading,$data_to_store);
+        // prd(lastQuery());
         return $ret ? true : false;
     
     }

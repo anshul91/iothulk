@@ -21,10 +21,9 @@
                                     <th>SignalType</th>
                                     <th>DeviceTypes</th>
                                     <th>Sensor</th>
-                                    <th>Min Val.</th>
-                                    <th>Max Val.</th>
+                                    
                                     <th>Purpose</th>
-                                    <th>Max Allowed Req.</th>
+                                    <!-- <th>Max Allowed Req.</th> -->
                                     <th>Created on</th>
                                     <th>Action</th>
                                 </tr>
@@ -242,6 +241,42 @@
                 </div>
             </div>
             <!--------------  Sensor Values Modal Ends Here------------->
+<!--Modal for Sensor reading sTRATS HERE-->
+
+
+            <div class="modal" id="sensor_reading_modal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Reading For - <span id="device_heading"></span></h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="col-lg-12">
+                            
+                                <div id="device_reading_data">
+                                    <!-- Data will be replaced by Ajax-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                           
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
         </div>
     </div>
     <!-- End PAge Content -->

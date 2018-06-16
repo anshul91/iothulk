@@ -29,9 +29,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
-         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/css/bootstrap-tour-standalone.min.css" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour-standalone.min.js"></script>
+        
 
 
         <!--        <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -141,7 +139,7 @@ $sess_userdata = $sess_userdata['userdata'][0];
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
-                            <span><a href="www.gadgetprogrammers.online">GadgetProgrammers</a></span>
+                            <span><a href="<?php echo site_url();?>">GadgetProgrammers</a></span>
                         </a>
                     </div>
                     <!-- End Logo -->

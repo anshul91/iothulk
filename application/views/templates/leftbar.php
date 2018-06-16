@@ -28,6 +28,15 @@ $api_key = $sess_data['userdata']['api_key'];
                     </ul>
                 </li>
                
+                <li class="nav-label" id="devices">Feedback</li>
+                <li> <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-laptop"></i>
+                        <span class="hide-menu">Feedback</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="feedback">Give Feedback</a></li>
+<!--                        <li><a href="email-read.html">Read</a></li>
+                        <li><a href="email-inbox.html">Inbox</a></li>-->
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -56,7 +65,9 @@ $api_key = $sess_data['userdata']['api_key'];
         </div>
     </div>
     <!--- Start Tour-->
-   
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/css/bootstrap-tour-standalone.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour-standalone.min.js"></script>
 <script>
 // Instance the tour
 var tour = new Tour({

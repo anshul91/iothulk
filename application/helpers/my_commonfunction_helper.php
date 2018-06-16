@@ -1126,3 +1126,12 @@ if (!function_exists("addUIDValidateScript")) {
     }
 
 }
+
+if (!function_exists("getSessionUserDetail")) {
+
+    function getSessionUserDetail() {
+        $ci = &get_instance();
+        return $ci->session->userdata('admin_userdata')['userdata'][0];
+    }
+
+}

@@ -124,7 +124,7 @@ function get_device_list() {
 }
 function delete_device(device_id){
     if(confirm("Are You sure to delete This record")){
-     var url = BASE_URL + "/Admin_device/delete_device"
+     var url = BASE_URL + "Admin_device/delete_device"
            $.ajax({
             type: "POST",
             url: url,
@@ -151,6 +151,59 @@ function change_device_type(){
     }else{
         $("#device_type").find("[value=2]").show();
     }
+
+}
+
+/*
+    Device Reading Function Starts here
+*/
+/*Show view with list of reading sensor values*/
+function get_device_reading_view(device_code,device_name){
+    if($.trim(device_code)=='' || device_code == 'undefined'){
+        fancyAlert('Device code is not defined!','warning');
+        return false;
+    }
+    var url = BASE_URL + "device-reading-view"
+           $.ajax({
+            type: "POST",
+            url: url,
+            data: {'device_code':device_code}, // serializes the form's elements.
+            success: function (data)
+            {
+
+                $("#device_heading").empty().append(" "+device_name);
+               $("#device_reading_data").html(data);
+            },
+            error: function (data) {
+                fancyAlert('Something unexpected happened please try after sometime.','error');
+                console.log("err in delete device:"+data);
+            }
+        });
+}
+
+/*Show datatable for sensor reading*/
+function get_device_reading_list(device_code) {
+    var sendData = {device_code:device_code};
+    $("#device_reading_list_tbl").dataTable().fnDestroy();
+    var dataTable = $('#device_reading_list_tbl').DataTable({
+        "serverSide": true,
+        "lengthMenu": [[10,50,100,100000], ['10','50','100',"All"]],
+        "ajax": {
+            url: BASE_URL + "Admin_device/get_device_reading_list", // json datasource
+            type: "post",
+            asyc: false,
+            "scrollX": true,
+            "scrollY": 250,
+            data: sendData,
+            error: function () {     // error handling
+                $.fn.dataTable.ext.errMode = 'throw';
+                $("#device_reading_list_tbl").html("");
+                $("#device_reading_list_tbl").append('<tbody class="employee-grid-error" colspan="10"><tr  ><th >No data found on server</th></tr></tbody>');
+                $("#device_reading_list_tbl").css("display", "none");
+            },
+        },
+
+    });
 
 }
 function validation(id, error_id, msg_name) {

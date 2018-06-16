@@ -3,11 +3,12 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Admin_user extends CI_Controller {
-
+    public $tbl_feedback_suggestion = 'tbl_feedback_suggestion';
     public function __construct() {
         parent::__construct();
         $this->load->model('User_model');
         $this->lang->load(array("button", "heading", "site_label"));
+
     }
 
     public function login() {
@@ -81,7 +82,15 @@ class Admin_user extends CI_Controller {
             redirect("login");
             exit;
         }
+        $user_detail_obj = getSessionUserDetail();
+        $tot_user_device = getTotUserDevice($user_detail_obj->user_id);
+        $feedback = getTableData($this->tbl_feedback_suggestion,array('is_approved'=>1,array('feedback','user_id')));
+        
+        $data['feedback'] = $feedback;
+        $data['tot_device'] = $tot_user_device;
+
         $data['main_content'] = 'admin/dashboard';
+        
         $this->load->view('templates/adminTemplate', $data);
     }
 
