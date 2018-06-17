@@ -44,7 +44,9 @@
 
             <div class="unix-login">
                 <div class="container-fluid">
+                <div class="alert alert-info" style="display: none; text-align: center;" id="success_alert"></div>
                     <div class="row justify-content-center">
+
                         <div class="col-lg-4">
                             <div class="login-content card">
                                 <div class="login-form">
