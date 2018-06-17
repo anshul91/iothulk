@@ -10,32 +10,7 @@
         $this->lang->load(array("button", "heading", "site_label"));
     }
 
- /*
-        =====================================================================================
-                            FUNCTIONS FOR DEVICES READING 
-        ===================================================================================== 
-*/
-    /*
-    * @usage : Show device reading list using ajax
-    */
-    public function get_device_reading_view(){
-        ob_clean();
-        $device_code = rq('device_code');
-        $data['device_code'] = $device_code;
-        echo $this->load->view('admin/device/device_reading',$data,true);
-        exit;
-    }
-    /*
-        @usage : Loading Device Reading for datatable
-    */
-    public function get_device_reading_list(){
-        $device_code = rqs('device_code');
-        if($device_code=='' || !is_numeric($device_code))
-            return false;
-        $user_detail = getSessionUserDetail();
-        $data = $this->Device_model->get_device_reading_list(array("user_id"=>$user_detail->user_id,'device_code'=>$device_code));
-        echo json_encode($data);
-    }
+
 
     /*
         =====================================================================================
@@ -64,7 +39,7 @@
                     exit;
                 }
                if($device_detail[0]->device_type !=1){
-                    exit(json_encode(array("status"=>0,'msg_type'=>'info','msg'=>'This is not Sensor Device (please change your device type).')));
+                    exit(json_encode(array("status"=>0,'msg_type'=>'info','msg'=>'This is not Sensor Device (please change your device type to GPS or other).')));
                 }
                else if($this->Device_model->store_device_reading(array("device_code"=>$device_code,"sensor_reading"=>$sensor_reading,'user_id'=>$user_id))){
                     echo json_encode(array('status'=>1,"msg_type"=>'success','msg'=>'Device Value Stored Successfully at:'.date('Y-m-d H:i:s')));
