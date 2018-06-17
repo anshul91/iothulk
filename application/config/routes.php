@@ -58,10 +58,13 @@ $route['feedback'] = 'Admin_feedback/index';
 $route['device-reading-view'] = 'Admin_device/get_device_reading_view';
 
 
-$route['store-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device/store_device_reading/$1/$2/$3';
-$route['store-gps-reading/(:any)/(:any)/(:any)/(:any)']['get'] = 'Admin_device/store_gps_device_reading/$1/$2/$3/$4';
-$route['get-device-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device/get_device_reading/$1/$2/$3';
-$route['get-device-reading/(:any)/(:any)']['get'] = 'Admin_device/get_device_reading/$1/$2';
+$route['store-reading/(:any)/(:any)/(:any)'] = 'Admin_device_api/store_device_reading/$1/$2/$3';
+$route['store-gps-reading/(:any)/(:any)/(:any)/(:any)']['get'] = 'Admin_device_api/store_gps_device_reading/$1/$2/$3/$4';
+$route['get-device-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device_api/get_device_reading/$1/$2/$3';
+$route['get-device-reading/(:any)/(:any)']['get'] = 'Admin_device_api/get_device_reading/$1/$2';
 $route['404_override'] = '';
 
 $route['translate_uri_dashes'] = FALSE;
+
+
+
