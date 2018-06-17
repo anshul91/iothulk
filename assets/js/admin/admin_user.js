@@ -43,7 +43,8 @@ jQuery("document").ready(function () {
     $("#login").click(function (e) {
 
         e.preventDefault();
-
+        //var plain_pass = $("#password").val();
+        //$("#password").val(sha512(plain_pass));
         var flag = true;
         if ($("#email_id").val() == "") {
             msg = "Email Id cannot be empty.";
@@ -67,8 +68,8 @@ jQuery("document").ready(function () {
             data: $("#frm_login").serialize(), // serializes the form's elements.
             success: function (data)
             {
-                if (data.status != 1) {
-                   fancyAlert(data.msg, data.msg_type); // show response from the php script.
+                if (data.status != '1') {
+                   //fancyAlert(data.msg, data.msg_type); // show response from the php script.
                 } else {
                     $("#login").css('disabled',true);
                     $("#success_alert").show().html(data.msg);

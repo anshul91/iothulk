@@ -61,7 +61,7 @@ class Device_model extends CI_Model {
             foreach ($resData as $rk => $row) {  // preparing an array
                 $nestedData = array();
                 $nestedData[] = $cnt++;
-                $device_code = '<i class=""></i><input type="text" readonly="true" class="btn btn-primary btn-sm" data-toggle="tooltip" title="" onclick="copy_clipboard(this.id)" id="device_code" value="'.$row['device_code'].'" data-original-title="Click to Copy!">';
+                $device_code = '<i class=""></i><input type="text" readonly="true" class="btn btn-primary btn-sm" data-toggle="tooltip" title="" onclick="copy_clipboard(this.id)" id="device_code_'.$cnt.'" value="'.$row['device_code'].'" data-original-title="Click to Copy!">';
 
                 $nestedData[] = isset($row['title']) && !empty($row['title']) ? $row['title']: "N/A";
                 $nestedData[] = isset($row['sub_title'])?$row['sub_title']:"";
