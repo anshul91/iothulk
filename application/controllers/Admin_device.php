@@ -163,7 +163,32 @@ public function update_device_detail(){
         }
         exit;
     }
-
+     /*
+        =====================================================================================
+                            FUNCTIONS FOR DEVICES READING 
+        ===================================================================================== 
+*/
+    /*
+    * @usage : Show device reading list using ajax
+    */
+    public function get_device_reading_view(){
+        ob_clean();
+        $device_code = rq('device_code');
+        $data['device_code'] = $device_code;
+        echo $this->load->view('admin/device/device_reading',$data,true);
+        exit;
+    }
+    /*
+        @usage : Loading Device Reading for datatable
+    */
+    public function get_device_reading_list(){
+        $device_code = rqs('device_code');
+        if($device_code=='' || !is_numeric($device_code))
+            return false;
+        $user_detail = getSessionUserDetail();
+        $data = $this->Device_model->get_device_reading_list(array("user_id"=>$user_detail->user_id,'device_code'=>$device_code));
+        echo json_encode($data);
+    }
 
 }
 ?>
