@@ -28,7 +28,7 @@ class Admin_user extends CI_Controller {
                 if ($data = $this->User_model->validate($data_to_store)) {
                     $this->session->set_userdata(array("admin_userdata" => $data));
 
-                    echo json_encode(array("status" => 1, "msg_type" => "success", "msg" => "Successfully Login!", "redirect_url" => site_url()));
+                    echo json_encode(array("status" => 1, "msg_type" => "success", "msg" => "Successfully Logged in redirecting you soon...", "redirect_url" => site_url()));
                     exit;
                 } else {
                     echo json_encode(array("status" => 0, "msg_type" => "error", "msg" => "User does not exists with given credentials!"));
