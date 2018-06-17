@@ -67,14 +67,16 @@ jQuery("document").ready(function () {
             data: $("#frm_login").serialize(), // serializes the form's elements.
             success: function (data)
             {
-                if (data.status !== 1) {
-//                    $("#error_msg").text(data.msg);
+                if (data.status != 1) {
+                   fancyAlert(data.msg, data.msg_type); // show response from the php script.
                 } else {
+                    $("#login").css('disabled',true);
+                    $("#success_alert").show().html(data.msg);
 //                    $("#error_msg").html('');
 
                 }
 //               console.log(data);
-                fancyAlert(data.msg, data.msg_type); // show response from the php script.
+                
                 if (data.hasOwnProperty('redirect_url'))
                     setTimeout(function () {
                         window.location.href = data.redirect_url;
