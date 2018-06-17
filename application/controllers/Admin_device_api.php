@@ -1,6 +1,6 @@
  <?php
 
- class Admin_device extends CI_Controller {
+ class Admin_device_api extends CI_Controller {
     protected $tbl_device = 'tbl_device';
     protected $tbl_device_reading = 'tbl_device_reading';
 
@@ -158,3 +158,4 @@
         exit;
     }
     
+}
