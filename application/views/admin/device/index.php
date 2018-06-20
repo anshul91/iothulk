@@ -16,13 +16,13 @@
                                 <tr>
                                     <th>S.no.</th>
                                     <th>Title</th>
-                                    <th>Sub Title</th>
+                                    <!-- <th>Sub Title</th> -->
                                     <th>Device Code</th>
                                     <th>SignalType</th>
                                     <th>DeviceTypes</th>
                                     <th>Sensor</th>
                                     
-                                    <th>Purpose</th>
+                                    <!-- <th>Purpose</th> -->
                                     <!-- <th>Max Allowed Req.</th> -->
                                     <th>Created on</th>
                                     <th>Action</th>
@@ -274,7 +274,40 @@
                 </div>
             </div>
 
+<!-----------------CHART MODAL--------->
+    <!--Modal for Sensor reading sTRATS HERE-->
 
+
+            <div class="modal" id="show_chart_modal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Select Chart for - <span id="chart_heading"></span></h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="col-lg-12">
+                            
+                                <div id="chart_selection">
+                                    <!-- Data will be replaced by Ajax-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-success" id="saveChart"> <i class="fa fa-check"></i> Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+<!----CHART MODAL ENDS HERE------------>
 
 
         </div>

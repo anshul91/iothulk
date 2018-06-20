@@ -27,6 +27,33 @@ $("#newDevice").on('click',function(){
     $("#updateDevice").hide();
 });
 
+ $("#saveChart").on('click',function(){
+            var url = BASE_URL + "/Admin_chart_selection/add_device_chart_detail"
+           $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $("#chart_selection_frm").serialize(), // serializes the form's elements.
+            success: function (data)
+            {
+                fancyAlert(data.msg, data.msg_type);
+                if (data.status === 1)
+                    setTimeout(function () {
+                        // show response from the php script.
+                        window.location.href = BASE_URL+"device-list";
+                    }, 2000);
+            },
+            error: function (data) {
+                alert("err"+data);
+            }
+        });
+
+        e.preventDefault();
+    });
+$("#newDevice").on('click',function(){
+    $("#saveDevice").show();
+    $("#updateDevice").hide();
+});
 });
 
 function update_device(device_id){
@@ -205,6 +232,33 @@ function get_device_reading_list(device_code) {
 
     });
 
+}
+
+
+
+
+/*Show view with list of reading sensor values*/
+function get_chart_selection_view(device_code,device_name){
+    if($.trim(device_code)=='' || device_code == 'undefined'){
+        fancyAlert('Device code is not defined!','warning');
+        return false;
+    }
+    var url = BASE_URL + "Admin_device/get_chart_selection_view"
+           $.ajax({
+            type: "POST",
+            url: url,
+            data: {'device_code':device_code}, // serializes the form's elements.
+            success: function (data)
+            {
+
+                $("#chart_heading").empty().append(" "+device_name);
+               $("#chart_selection").html(data);
+            },
+            error: function (data) {
+                fancyAlert('Something unexpected happened please try after sometime.','error');
+                console.log("err in delete device:"+data);
+            }
+        });
 }
 function validation(id, error_id, msg_name) {
     if ($("#" + id).val() === "") {

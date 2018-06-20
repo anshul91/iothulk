@@ -64,7 +64,7 @@
                                         <input type="password" placeholder="Password" name="password" id="password" required="" class="form-control">
                                         <!--<i class="fa fa-lock"></i>-->
                                     </div>
-                                    <div class="checkbox">
+                                    <!-- <div class="checkbox">
                                         <label>
                                             <input type="checkbox"> Remember Me
                                         </label>
@@ -72,7 +72,7 @@
                                             <a href="#">Forgotten Password?</a>
                                         </label>
 
-                                    </div>
+                                    </div> -->
                                     <button type="button" id="login" name="login" class="btn btn-primary btn-flat m-b-30 m-t-30">Sign in</button>
                                     <div class="register-link m-t-15 text-center">
                                         <p>Don't have account ? <a href="<?php echo site_url("signup"); ?>"> Sign Up Here</a></p>

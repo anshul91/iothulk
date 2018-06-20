@@ -56,8 +56,13 @@ $route['signup'] = 'Admin_user/signup';
 $route['device-list'] = 'Admin_device/index';
 $route['feedback'] = 'Admin_feedback/index';
 $route['device-reading-view'] = 'Admin_device/get_device_reading_view';
+$route['choose-chart'] = 'Admin_chart_selection/index';
+$route['chart-analysis'] = 'Admin_chart_selection/get_chart_analysis_view';
 
 
+#==============================================================================
+############################## API CALL ROUTES ################################
+#==============================================================================
 $route['store-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device_api/store_device_reading/$1/$2/$3';
 $route['store-gps-reading/(:any)/(:any)/(:any)/(:any)']['get'] = 'Admin_device_api/store_gps_device_reading/$1/$2/$3/$4';
 $route['get-device-reading/(:any)/(:any)/(:any)']['get'] = 'Admin_device_api/get_device_reading/$1/$2/$3';

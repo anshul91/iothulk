@@ -64,7 +64,7 @@ class Device_model extends CI_Model {
                 $device_code = '<i class=""></i><input type="text" readonly="true" class="btn btn-primary btn-sm" data-toggle="tooltip" title="" onclick="copy_clipboard(this.id)" id="device_code_'.$cnt.'" value="'.$row['device_code'].'" data-original-title="Click to Copy!">';
 
                 $nestedData[] = isset($row['title']) && !empty($row['title']) ? $row['title']: "N/A";
-                $nestedData[] = isset($row['sub_title'])?$row['sub_title']:"";
+                // $nestedData[] = isset($row['sub_title'])?$row['sub_title']:"";
                 
                 $nestedData[] = isset($row['device_code'])?$device_code:"";
 
@@ -77,7 +77,7 @@ class Device_model extends CI_Model {
 
                 // $nestedData[] = isset($row['min_val']) ? $row['min_val'] : "";
                 // $nestedData[] = isset($row['max_val']) ? $row['max_val'] : "";
-                $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
+                // $nestedData[] = isset($row['purpose']) ? $row['purpose'] : "";
                 // $nestedData[] = isset($row['max_request']) ? $row['max_request'] : "";
                 $nestedData[] = isset($row['created']) ? date("d-M-Y H:i:s",strtotime($row['created'])) : "";
                 $device_id = encryptMyData($row['device_id']);
@@ -87,7 +87,8 @@ class Device_model extends CI_Model {
                 $show_reading_btn = "<button class='btn btn-info btn-sm' data-toggle='modal' data-target='#sensor_reading_modal' onclick=get_device_reading_view('".$device_code."','".$title."')><i class='fa fa-eye'></i></button>";
 
                 $del_btn = " <button onclick=delete_device('".$device_id."') name='btn_delete' class='btn btn-danger btn-sm'>".$this->lang->line('icon_trash').'</button>';
-                $nestedData[] = $show_reading_btn.$update_btn.$del_btn;
+                $show_chart_btn = "<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#show_chart_modal' onclick=get_chart_selection_view('".$device_code."','".$title."')><i class='fa fa-bar-chart'></i></button>";                
+                $nestedData[] = $show_reading_btn.$show_chart_btn.$update_btn.$del_btn;
                 
                 $data[] = $nestedData;
             }

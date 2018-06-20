@@ -14,14 +14,13 @@ class Admin_device extends CI_Controller {
         $this->lang->load(array("button", "heading", "site_label"));
         //prd($this->session->all_userdata());
         if ($this->session->userdata("admin_userdata") === NULL) {
-            prd($this->input->get());
             redirect("login");
             exit;
         }
 
     }
 
-    public function index() {       
+    public function index() {
         $data['main_content'] = 'admin/device/index';
         $this->load->view('templates/adminTemplate',$data);
     }
@@ -190,5 +189,17 @@ public function update_device_detail(){
         echo json_encode($data);
     }
 
+
+
+ /*
+    * @usage : Show device reading list using ajax
+    */
+    public function get_chart_selection_view(){
+        ob_clean();
+        $device_code = rq('device_code');
+        $data['device_code'] = $device_code;
+        echo $this->load->view('admin/chart_selection/index',$data,true);
+        exit;
+    }
 }
 ?>

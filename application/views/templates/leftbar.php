@@ -23,11 +23,19 @@ $api_key = $sess_data['userdata']['api_key'];
                         <span class="hide-menu">Device</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="device-list">List Device</a></li>
-<!--                        <li><a href="email-read.html">Read</a></li>
-                        <li><a href="email-inbox.html">Inbox</a></li>-->
+                        <li><a href="choose-chart">Add Charts To Analyze</a></li>
+                        <!-- <li><a href="email-inbox.html">Inbox</a></li> -->
                     </ul>
                 </li>
-               
+               <li class="nav-label" id="devices">Chart Analysis</li>
+                <li> <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-bar-chart"></i>
+                        <span class="hide-menu">Analysis</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="chart-analysis">Data On charts</a></li>
+                        <!-- <li><a href="email-read.html">Add Charts To Analyze</a></li> -->
+                        <!-- <li><a href="email-inbox.html">Inbox</a></li> -->
+                    </ul>
+                </li>
                 <li class="nav-label" id="devices">Feedback</li>
                 <li> <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-laptop"></i>
                         <span class="hide-menu">Feedback</span></a>
